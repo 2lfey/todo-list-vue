@@ -119,6 +119,11 @@ export default {
           break
         }
       }
+
+      if ((this.board[1].length >= 5) && (column == 0 || column == 2) || (this.board[0].length == 3 && column == 1)) {
+        return
+      }
+
       const item = task.items.find(item => item.id == itemId)
 
       // const prevCheckedCount = task.items.reduce((a, b) => a + Number(b.isChecked), 0)
