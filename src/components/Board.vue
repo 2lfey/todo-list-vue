@@ -152,7 +152,7 @@ export default {
         if (flat.length == 0) {
           task.id = 0
         } else {
-          task.id = flat.sort((i1, i2) => i1.id > i2.id)[0].id++
+          task.id = flat.sort((i1, i2) => -(i1.id - i2.id))[0].id++
         }
 
         this.board[0].push(task)
