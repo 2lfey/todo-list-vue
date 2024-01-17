@@ -1,5 +1,5 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
+import Board from './components/Board.vue'
 </script>
 
 <template>
@@ -7,7 +7,7 @@ import HelloWorld from './components/HelloWorld.vue'
 
   <main class="flex-1 py-4 w-full">
 
-    <HelloWorld msg="Vite + Vue" />
+    <Board />
 
   </main>
 
