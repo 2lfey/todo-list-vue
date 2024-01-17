@@ -2,6 +2,7 @@
 
 import Task from './Task.vue';
 import CreationForm from './CreationForm.vue';
+import { getBoard, saveBoard } from '../utils';
 
 const _board = [
   [
@@ -99,6 +100,9 @@ const _board = [
 ]
 
 export default {
+  beforeMount() {
+    this.board = getBoard()
+  },
   data: () => ({
     board: _board,
     isCreating: false
@@ -133,6 +137,8 @@ export default {
         this.board[column].splice(this.board[column].indexOf(task), 1)
         this.board[0].push(task)
       }
+
+      saveBoard(this.board)
     },
     closePopup(e) {
       if (e.target === e.currentTarget) {
@@ -141,6 +147,8 @@ export default {
     },
     createTask(task) {
       this.board[0].push(task)
+
+      saveBoard(this.board)
     }
   },
   components: {
