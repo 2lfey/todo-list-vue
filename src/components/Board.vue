@@ -104,7 +104,7 @@ export default {
     this.board = getBoard()
   },
   data: () => ({
-    board: _board,
+    board: null,
     isCreating: false
   }),
   methods: {
@@ -146,9 +146,24 @@ export default {
       }
     },
     createTask(task) {
-      this.board[0].push(task)
+      if (this.canCreateTask) {
+        const flat = this.board.flat()
+        
+        if (flat.length == 0) {
+          task.id = 0
+        } else {
+          task.id = flat.sort((i1, i2) => i1.id - i2.id)[0].id++
+        }
 
-      saveBoard(this.board)
+        this.board[0].push(task)
+
+        saveBoard(this.board)
+      }
+    }
+  },
+  computed: {
+    canCreateTask() {
+      return this.board[0].length < 3
     }
   },
   components: {
@@ -161,7 +176,7 @@ export default {
 <template>
   <div class="flex flex-col gap-4">
     <div class="ml-auto">
-      <button @click="isCreating = true"
+      <button @click="isCreating = true" :disabled="!canCreateTask"
         class="px-3 py-1.5 font-semibold text-sm bg-primary-500 hover:bg-primary-700 rounded text-white">
         Create task
       </button>
@@ -172,11 +187,12 @@ export default {
       </div>
     </div>
 
-    <div v-show="isCreating" @click="closePopup" class="flex items-center justify-center absolute top-0 left-0 w-screen h-screen bg-gray-300/50">
+    <div v-show="isCreating" @click="closePopup"
+      class="flex items-center justify-center absolute top-0 left-0 w-screen h-screen bg-gray-300/50">
       <div class="max-w-96 w-full bg-gray-100 p-4 rounded-xl">
-        <CreationForm @create-task="createTask"/>
+        <CreationForm @create-task="createTask" />
       </div>
     </div>
-    
+
   </div>
 </template>

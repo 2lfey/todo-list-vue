@@ -26,7 +26,7 @@ export default {
       <label className='block ml-2 text-sm font-bold text-gray-900 dark:text-white'>
         Title
       </label>
-      <input type="text" placeholder="Task title" v-model="task.title"
+      <input type="text" placeholder="Task title" v-model="task.title" required
         class='transition-colors duration-200 bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 outline-none' />
     </div>
 
@@ -35,7 +35,7 @@ export default {
         <label className='block ml-2 text-sm font-bold text-gray-900 dark:text-white'>
           Item
         </label>
-        <input type="text" placeholder="Item title" v-model="task.items[n - 1]"
+        <input type="text" placeholder="Item title" v-model="task.items[n - 1]" required
           class='transition-colors duration-200 bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 outline-none' />
       </div>
 
