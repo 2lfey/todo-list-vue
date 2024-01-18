@@ -4,101 +4,6 @@ import Task from './Task.vue';
 import CreationForm from './CreationForm.vue';
 import { getBoard, saveBoard } from '../utils';
 
-const _board = [
-  [
-    {
-      id: 0,
-      title: 'Task',
-      items: [
-        {
-          id: 0,
-          title: "item title",
-          isChecked: false,
-        },
-        {
-          id: 1,
-          title: "item title",
-          isChecked: false,
-        },
-        {
-          id: 2,
-          title: "item title",
-          isChecked: true,
-        },
-        {
-          id: 3,
-          title: "item title",
-          isChecked: false,
-        },
-        {
-          id: 4,
-          title: "item title",
-          isChecked: false,
-        },
-      ],
-    },
-    {
-      id: 1,
-      title: 'Task',
-      items: [
-        {
-          id: 0,
-          title: "item title",
-          isChecked: false,
-        },
-        {
-          id: 1,
-          title: "item title",
-          isChecked: true,
-        },
-        {
-          id: 2,
-          title: "item title",
-          isChecked: true,
-        },
-        {
-          id: 3,
-          title: "item title",
-          isChecked: false,
-        },
-        {
-          id: 4,
-          title: "item title",
-          isChecked: false,
-        },
-      ],
-    },
-    {
-      id: 2,
-      title: 'Task',
-      items: [
-        {
-          id: 0,
-          title: "item title",
-          isChecked: false,
-        },
-        {
-          id: 1,
-          title: "item title",
-          isChecked: true,
-        },
-        {
-          id: 2,
-          title: "item title",
-          isChecked: true,
-        },
-        {
-          id: 3,
-          title: "item title",
-          isChecked: false,
-        },
-      ],
-    }
-  ],
-  [],
-  []
-]
-
 export default {
   beforeMount() {
     this.board = getBoard()
@@ -120,27 +25,38 @@ export default {
         }
       }
 
-      if ((this.board[1].length >= 5) && (column == 0 || column == 2) || (this.board[0].length == 3 && column == 1)) {
-        return
-      }
-
       const item = task.items.find(item => item.id == itemId)
 
-      // const prevCheckedCount = task.items.reduce((a, b) => a + Number(b.isChecked), 0)
+      const prevCheckState = item.isChecked
 
-      item.isChecked = !item.isChecked
+      if ((column == 0) && (this.board[1].length >= 5)) { // 0 -> 1
+        item.isChecked = false // stop moving from 0 col
+        // saveBoard(this.board)
+        // return
+      } else if ((column == 1) && (this.board[0].length >= 3)) { // 1 -> 0
+        item.isChecked = true // move 2
+        // saveBoard(this.board)
+        // return
+      } else if ((column == 2) && (this.board[1].length >= 5)) { // 2 -> 1
+        return // stop moving for 2 col
+      } else {
+        item.isChecked = !item.isChecked
+      }
 
       const checkedCount = task.items.reduce((a, b) => a + Number(b.isChecked), 0)
 
-      if ((checkedCount / task.items.length) == 1) {
-        this.board[column].splice(this.board[column].indexOf(task), 1)
-        this.board[2].push(task)
-      } else if ((checkedCount / task.items.length) > 0.5) {
-        this.board[column].splice(this.board[column].indexOf(task), 1)
-        this.board[1].push(task)
-      } else if (column != 0) {
-        this.board[column].splice(this.board[column].indexOf(task), 1)
-        this.board[0].push(task)
+
+      if (prevCheckState != item.isChecked) {
+        if ((checkedCount / task.items.length) == 1) {
+          this.board[column].splice(this.board[column].indexOf(task), 1)
+          this.board[2].push(task)
+        } else if ((checkedCount / task.items.length) > 0.5) {
+          this.board[column].splice(this.board[column].indexOf(task), 1)
+          this.board[1].push(task)
+        } else if (column != 0) {
+          this.board[column].splice(this.board[column].indexOf(task), 1)
+          this.board[0].push(task)
+        }
       }
 
       saveBoard(this.board)
@@ -153,7 +69,7 @@ export default {
     createTask(task) {
       if (this.canCreateTask) {
         const flat = this.board.flat()
-        
+
         if (flat.length == 0) {
           task.id = 0
         } else {
