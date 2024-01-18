@@ -30,9 +30,17 @@ export default {
       const prevCheckState = item.isChecked
 
       if ((column == 0) && (this.board[1].length >= 5)) { // 0 -> 1
-        item.isChecked = false // stop moving from 0 col
-        // saveBoard(this.board)
-        // return
+        if (!item.isChecked) {
+          item.isChecked = true
+
+          const checkedCount = task.items.reduce((a, b) => a + Number(b.isChecked), 0)
+
+          if ((checkedCount / task.items.length) > 0.5) {
+            item.isChecked = false
+          }
+        } else {
+          item.isChecked = false
+        }
       } else if ((column == 1) && (this.board[0].length >= 3)) { // 1 -> 0
         item.isChecked = true // move 2
         // saveBoard(this.board)
